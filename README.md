@@ -29,3 +29,9 @@ This project simulates a high-frequency retail environment where sales data is i
 1. Clone the repository:
    ```bash
    git clone [https://github.com/ks-95/Real-Time-Sales-Pipeline.git](https://github.com/ks-95/Real-Time-Sales-Pipeline.git)
+2. Install dependencies:
+   ```bash
+   pip install pandas numpy
+3. Run the pipeline:
+   ```bash
+   python stream_producer.py
