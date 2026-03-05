@@ -2,7 +2,7 @@ import duckdb
 import time
 import os
 
-# Connect to a temporary in-memory database
+# Connect to database
 con = duckdb.connect()
 
 print("--- Real-Time Analytics Dashboard Starting ---")
@@ -11,7 +11,7 @@ print("Watching 'live_stream.json' for changes...\n")
 while True:
     if os.path.exists("live_stream.json"):
         try:
-            # DuckDB magic: Query the JSON file directly
+            #  query json file 
             query = """
                 SELECT 
                     count(*) as total_sales,
@@ -24,10 +24,10 @@ while True:
                 LIMIT 5;
             """
             
-            # Execute and show results
+            # show result
             result = con.execute(query).df()
             
-            # Clear terminal for a 'dashboard' feel
+            # clear terminl for dashboard
             os.system('cls' if os.name == 'nt' else 'clear')
             
             print(f"--- Dashboard Update: {time.strftime('%H:%M:%S')} ---")
@@ -35,8 +35,8 @@ while True:
             print("\n(Press Ctrl+C to stop)")
             
         except Exception as e:
-            print(f"Waiting for more data... {e}")
+            print(f"Waiting for more data{e}")
     else:
-        print("Waiting for 'live_stream.json' to be created by the producer...")
+        print("Waiting for 'live_stream.json' to be created by the producer")
         
-    time.sleep(2) # Refresh every 2 seconds
+    time.sleep(2) #refresh
