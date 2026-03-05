@@ -4,15 +4,15 @@ import pandas as pd
 import time
 import os
 
-# Page Config
+# page configr
 st.set_page_config(page_title="Yukin.ai Prep: Real-Time AI", layout="wide")
 st.title("🚀 Real-Time Sales & Anomaly Detection")
 
-# Helper to connect to DuckDB
+#  connect to db
 def get_data():
     con = duckdb.connect()
     if os.path.exists("live_stream.json"):
-        # Primary Query: Get KPIs, Latest Sale, and Historical Average in one go
+        # KPIs, Latest Sale, and Historical Average in one go
         query = """
         WITH base_data AS (
             SELECT * FROM read_json_auto('live_stream.json')
@@ -40,7 +40,7 @@ def get_data():
         return con.execute(query).df()
     return None
 
-# Placeholders for UI
+# placeholders for Ui
 kpi_area = st.empty()
 alert_area = st.empty()
 chart_area = st.empty()
@@ -50,15 +50,15 @@ while True:
     df = get_data()
     
     if df is not None and not df.empty:
-        # 1. Update KPI Cards
+        #  update Kpi Cards
         with kpi_area.container():
             col1, col2, col3 = st.columns(3)
             col1.metric("Total Transactions", int(df['total_sales'][0]))
             col2.metric("Total Revenue", f"${df['total_revenue'][0]:,.2f}")
             col3.metric("Global Avg Price", f"${df['global_avg'][0]:,.2f}")
 
-        # 2. THE ALERT LOGIC (The "AI" Part)
-        # If the latest price is > 3x the global average, trigger red alert
+        #  the ai logic.
+        # if the latest price is > 3x the global average trigger red alert
         last_price = df['last_price'][0]
         avg_price = df['global_avg'][0]
         
@@ -68,10 +68,10 @@ while True:
             else:
                 st.success("✅ System Status: Normal. Monitoring stream...")
 
-        # 3. Recent Transactions Table
+        # 3.recent transction table
         with table_area.container():
             st.subheader("Latest Stream Events")
-            # Pull last 5 rows for the table
+            # last 5 rows for tble
             con_temp = duckdb.connect()
             recent_df = con_temp.execute("SELECT timestamp, product, price FROM read_json_auto('live_stream.json') ORDER BY timestamp DESC LIMIT 5").df()
             st.table(recent_df)
